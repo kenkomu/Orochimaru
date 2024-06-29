@@ -3,8 +3,7 @@ use piston_window::types::Color;
 
 use rand:: {thread_rng, Rng};
 
-use snake::{Direction, Snake};
-use draw::{draw_block, draw_rectangle};
+use crate::draw::{draw_block, draw_rectangle};
 
 use crate::snake::{Direction, Snake};
 
@@ -112,4 +111,38 @@ impl Game {
 
         next_x > 0 && next_y < self.width -1 && next_y < self.height - 1
     }
-}
+
+    fn add_food(&mut self) {
+        let mut rng = thread_rng();
+//can't understand the errorws below
+        let mut new_x = rng.gen_range(1..self.width - 1);
+        let mut new_y = rng.gen_range(1..self.height - 1);
+        while self.snake.overlap_tail(new_x, new_y) {
+            new_x = rng.gen_range(1..self.width - 1);
+            new_y = rng.gen_range(1..self.height - 1);
+
+        }
+
+        self.food_x = new_x;
+        self.food_y = new_y;
+        self.food_exists = true;
+    }
+    fn update_snake(&mut self, dir: Option<Direction>) {
+        if self.check_if_snake_alive(dir) {
+            self.snake.move_forward(dir);
+            self.check_eating();
+        } else {
+            self.game_over = true;
+        }
+        self.waiting_time = 0.0;
+        }
+
+        fn restart(&mut self) {
+            self.snake = Snake :: new(2, 2);
+            self.waiting_time = 0.0;
+            self.food_exists = true;
+            self.food_x = 6;
+            self.food_y = 4;
+            self.game_over = false;
+        }
+    }
