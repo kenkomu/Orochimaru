@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+</head>
+<body>
+    <h1>Game Page</h1>
+    <div id="gameContainer"></div>
+    <script src="afterconnect.js"></script>
+    <script type="module">
+        import init, { start_game } from './game_wasm.js';
+        async function run() {
+            await init();
+            start_game();
+        }
+        run();
+    </script>
+</body>
+</html>
